@@ -38,5 +38,5 @@
         }
     },
 
-    "workspaceFolder": "/workspaces/my-static-site"
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}"
 }
