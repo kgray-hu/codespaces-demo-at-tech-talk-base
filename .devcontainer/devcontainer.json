@@ -8,13 +8,24 @@
     // Forward the default Python Simple HTTP Server port (8000).
     "forwardPorts": [8000],
 
+    // Define attributes for specific forwarded ports.
+    // This is where you can set visibility, protocol, and other options.
+    "portsAttributes": {
+        "8000": { // Reference the port number you want to configure
+            "label": "Web App", // Optional: A user-friendly label for the port in the UI
+            "onAutoForward": "notify", // Optional: Control behavior when port is auto-forwarded (openBrowser, openBrowserOnce, silent, notify)
+            "revealBrowser": "always", // Optional: Always open in browser when forwarded
+            "visibility": "public" // *** CRITICAL: Set visibility to 'public' here ***
+        }
+    },
+
     // Commands to run ONCE after the Codespace is initially created.
     // This is ideal for installing tools, dependencies, or running one-time setup scripts.
     "postCreateCommand": {
-        "install_linter_black": "pip install black", // Example 1: Install Python linter 'black'
-        "install_cli_tool_jq": "sudo apt-get update && sudo apt-get install -y jq", // Example 2: Install specific CLI tool 'jq'
+        "install_linter_black": "python3 -m pip install black && echo 'Black installed successfully.'", // Example 1: Install Python linter 'black' more robustly
+        "install_cli_tool_jq": "sudo apt-get update && sudo apt-get install -y jq && echo 'jq installed successfully.'", // Example 2: Install specific CLI tool 'jq' with confirmation
         "run_custom_script": "chmod +x ./.devcontainer/setup.sh && ./.devcontainer/setup.sh", // Example 3: Run a script from your repo
-        "start_server": "python3 -m http.server 8000" // Start the web server
+        "start_server": "python3 -m http.server --bind 0.0.0.0 8000" // *** CRITICAL FIX: Bind to 0.0.0.0 ***
     },
 
     // Commands to run EVERY TIME the Codespace is started or restarted.
@@ -27,7 +38,8 @@
             "extensions": [
                 "esbenp.prettier-vscode",      // For code formatting
                 "formulahendry.auto-rename-tag", // Useful for HTML
-                "ms-python.python"            // For Python support (used by Black and http.server)
+                "ms-python.python",            // For Python support (used by Black and http.server)
+                "eamodio.gitlens"              // GitLens: Git supercharged! (Adds sidebar icon)
             ],
             "settings": {
                 "editor.formatOnSave": true,
