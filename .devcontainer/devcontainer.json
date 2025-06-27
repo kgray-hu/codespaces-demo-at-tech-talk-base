@@ -1,0 +1,42 @@
+// .devcontainer/devcontainer.json
+{
+    "name": "Static Web Page with Advanced Setup Commands",
+    // Use a lightweight universal image that typically includes Python.
+    // This demonstrates leveraging an existing Docker image.
+    "image": "mcr.microsoft.com/devcontainers/universal:latest",
+
+    // Forward the default Python Simple HTTP Server port (8000).
+    "forwardPorts": [8000],
+
+    // Commands to run ONCE after the Codespace is initially created.
+    // This is ideal for installing tools, dependencies, or running one-time setup scripts.
+    "postCreateCommand": {
+        "install_linter_black": "pip install black", // Example 1: Install Python linter 'black'
+        "install_cli_tool_jq": "sudo apt-get update && sudo apt-get install -y jq", // Example 2: Install specific CLI tool 'jq'
+        "run_custom_script": "chmod +x ./.devcontainer/setup.sh && ./.devcontainer/setup.sh", // Example 3: Run a script from your repo
+        "start_server": "python3 -m http.server 8000" // Start the web server
+    },
+
+    // Commands to run EVERY TIME the Codespace is started or restarted.
+    // Useful for re-starting services or performing checks.
+    "postStartCommand": "echo 'Codespace has restarted! Listing custom artifacts:' && ls -la /tmp/custom_setup_artifacts",
+
+
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "esbenp.prettier-vscode",      // For code formatting
+                "formulahendry.auto-rename-tag", // Useful for HTML
+                "ms-python.python"            // For Python support (used by Black and http.server)
+            ],
+            "settings": {
+                "editor.formatOnSave": true,
+                // Configure Black as the formatter for Python files
+                "python.formatting.provider": "black",
+                "python.formatting.blackEnabled": true
+            }
+        }
+    },
+
+    "workspaceFolder": "/workspaces/my-static-site"
+}
